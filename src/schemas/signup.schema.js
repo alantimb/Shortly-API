@@ -1,8 +1,8 @@
-import Joi from "joi";
+import joi from "joi";
 
-export const signUpSchema = Joi.object({
-    name: Joi.string().min(3).required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().required(),
-    confirmPassword: Joi.any().validate(Joi.ref('password')).required()
-})
+export const signUpSchema = joi.object({
+  name: joi.string().min(3).required(),
+  email: joi.string().email().required(),
+  password: joi.string().required(),
+  confirmPassword: joi.any().equal(joi.ref("password")).required(),
+});

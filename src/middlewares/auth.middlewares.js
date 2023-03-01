@@ -1,4 +1,4 @@
-import connection from "../database/db.js";
+import connection from "../database/database.connection.js";
 import { signUpSchema } from "../schemas/signup.schema.js";
 
 export async function validSchemaUser(req, res, next) {
@@ -15,14 +15,13 @@ export async function validSchemaUser(req, res, next) {
       "SELECT * FROM users WHERE email=$1",
       [user.email]
     );
-
-    if (userExists) {
+    if (userExists.rowCount > 0) {
       return res.sendStatus(409);
     }
 
     res.locals.user = user;
     next();
   } catch (err) {
-    return res.status(500).send(err.message);
+    return res.status(500).send(err.message + " oi");
   }
 }
