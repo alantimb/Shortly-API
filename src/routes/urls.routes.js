@@ -5,7 +5,11 @@ import { urlSchemaValidation } from "../middlewares/links.middlewares.js";
 
 const router = Router();
 
-router.use(authRoutesValidation)
-router.post("/urls/shorten", urlSchemaValidation, shortUrl);
+router.post(
+  "/urls/shorten",
+  authRoutesValidation,
+  urlSchemaValidation,
+  shortUrl
+);
 
 export default router;

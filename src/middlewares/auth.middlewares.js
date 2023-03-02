@@ -71,7 +71,7 @@ export async function authRoutesValidation(req, res, next) {
       "SELECT * FROM sessions WHERE token=$1",
       [token]
     );
-    if (!session) return res.sendStatus(401);
+    if (session.rows.length === 0) return res.sendStatus(401);
 
     const user = await connection.query("SELECT * FROM users WHERE id=$1", [
       session.rows[0].userId,
