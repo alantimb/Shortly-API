@@ -1,5 +1,5 @@
 import connection from "../database/database.connection.js";
-import { signInSchema, signUpSchema } from "../schemas/signup.schema.js";
+import { signInSchema, signUpSchema } from "../schemas/auth.schemas.js";
 import bcrypt from "bcrypt";
 
 export async function userSchemaValidation(req, res, next) {
@@ -52,6 +52,30 @@ export async function signInSchemaValidation(req, res, next) {
       userExists.rows[0].password
     );
     if (!passwordIsOk) return res.sendStatus(401);
+
+    res.locals.user = user;
+    next();
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
+}
+
+export async function authRoutesValidation(req, res, next) {
+  const { authorization } = req.headers;
+  const token = authorization?.replace("Bearer ", "");
+
+  if (!token) return res.sendStatus(401);
+
+  try {
+    const session = await connection.query(
+      "SELECT * FROM sessions WHERE token=$1",
+      [token]
+    );
+    if (!session) return res.sendStatus(401);
+
+    const user = await connection.query("SELECT * FROM users  WHERE id=$1", [
+      session.userId,
+    ]);
 
     res.locals.user = user;
     next();
