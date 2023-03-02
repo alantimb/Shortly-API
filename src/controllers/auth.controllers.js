@@ -23,10 +23,11 @@ export async function signIn(req, res) {
 
   try {
     const token = uuid();
-    "SELECT * FROM users WHERE email=$1"
-    const userId = await connection.query("SELECT id FROM users WHERE email=$1", [
-      user.email,
-    ]);
+    ("SELECT * FROM users WHERE email=$1");
+    const userId = await connection.query(
+      "SELECT id FROM users WHERE email=$1",
+      [user.email]
+    );
     console.log(userId.rows[0].id);
 
     await connection.query(
@@ -34,7 +35,7 @@ export async function signIn(req, res) {
       [userId.rows[0].id, token]
     );
 
-    return res.status(200).send(token);
+    return res.status(200).send({ token: token });
   } catch (err) {
     return res.status(500).send(err.message);
   }
