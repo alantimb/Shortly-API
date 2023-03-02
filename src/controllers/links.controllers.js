@@ -23,12 +23,28 @@ export async function shortUrl(req, res) {
       'SELECT * FROM urls WHERE "shortUrl"=$1',
       [urls.shortUrl]
     );
-    return res
-      .status(201)
-      .send({
-        id: findShorten.rows[0].id,
-        shortUrl: findShorten.rows[0].shortUrl,
-      });
+    return res.status(201).send({
+      id: findShorten.rows[0].id,
+      shortUrl: findShorten.rows[0].shortUrl,
+    });
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
+}
+
+export async function findShortenUrl(req, res) {
+  const { id } = req.params;
+
+  try {
+    const urlExists = await connection.query("SELECT * FROM urls WHERE id=$1", [id]);
+    if (urlExists.rows.length === 0) return res.sendStatus(404);
+
+    const urlAndShorten = {
+        id: urlExists.rows[0].id,
+        shortUrl: urlExists.rows[0].shortUrl,
+        url: urlExists.rows[0].url
+    }
+    return res.status(200).send(urlAndShorten)
   } catch (err) {
     return res.status(500).send(err.message);
   }

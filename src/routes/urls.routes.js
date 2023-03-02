@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { shortUrl } from "../controllers/links.controllers.js";
+import { findShortenUrl, shortUrl } from "../controllers/links.controllers.js";
 import { authRoutesValidation } from "../middlewares/auth.middlewares.js";
 import { urlSchemaValidation } from "../middlewares/links.middlewares.js";
 
@@ -11,5 +11,6 @@ router.post(
   urlSchemaValidation,
   shortUrl
 );
+router.get("/urls/:id", findShortenUrl);
 
 export default router;
