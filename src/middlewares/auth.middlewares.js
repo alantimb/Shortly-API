@@ -61,8 +61,8 @@ export async function signInSchemaValidation(req, res, next) {
 }
 
 export async function authRoutesValidation(req, res, next) {
-  const { Authorization } = req.headers;
-  const token = Authorization?.replace("Bearer ", "");
+  const { authorization } = req.headers;
+  const token = authorization?.replace("Bearer ", "");
 
   if (!token) return res.sendStatus(401);
 
