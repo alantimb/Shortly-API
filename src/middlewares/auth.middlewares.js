@@ -24,7 +24,7 @@ export async function userSchemaValidation(req, res, next) {
     res.locals.user = user;
     next();
   } catch (err) {
-    return res.status(500).send(err.message + " oi");
+    return res.status(500).send(err.message);
   }
 }
 
@@ -56,6 +56,6 @@ export async function signInSchemaValidation(req, res, next) {
     res.locals.user = user;
     next();
   } catch (err) {
-    return res.status(500).send(err.message + " hi");
+    return res.status(500).send(err.message);
   }
 }

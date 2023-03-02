@@ -23,16 +23,17 @@ export async function signIn(req, res) {
 
   try {
     const token = uuid();
-
-    const userId = await connection.query("SELECT id from users WHERE=$1", [
+    "SELECT * FROM users WHERE email=$1"
+    const userId = await connection.query("SELECT id FROM users WHERE email=$1", [
       user.email,
     ]);
+    console.log(userId.rows[0].id);
 
-    const session = {
-      userId: userId,
-      token: token
-    }
-await connection.query("INSERT INTO ")
+    await connection.query(
+      'INSERT INTO sessions ("userId", token) VALUES ($1, $2)',
+      [userId.rows[0].id, token]
+    );
+
     return res.status(200).send(token);
   } catch (err) {
     return res.status(500).send(err.message);
