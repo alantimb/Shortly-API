@@ -53,6 +53,40 @@ ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
 
 
 --
+-- Name: urls; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.urls (
+    id integer NOT NULL,
+    "userId" integer NOT NULL,
+    url text NOT NULL,
+    "shortUrl" character varying(8) NOT NULL,
+    "visitCount" bigint DEFAULT 0 NOT NULL,
+    "createdAt" timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+--
+-- Name: urls_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.urls_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: urls_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.urls_id_seq OWNED BY public.urls.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -93,6 +127,13 @@ ALTER TABLE ONLY public.sessions ALTER COLUMN id SET DEFAULT nextval('public.ses
 
 
 --
+-- Name: urls id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.urls ALTER COLUMN id SET DEFAULT nextval('public.urls_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -104,6 +145,19 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 INSERT INTO public.sessions VALUES (1, 5, '715b5ded-8288-4e06-8447-1a659b1a47f8', '2023-03-01 23:43:24.921503');
+INSERT INTO public.sessions VALUES (2, 5, 'c4ba1ada-da9f-427e-98fe-6d95576abac3', '2023-03-01 23:52:03.577005');
+INSERT INTO public.sessions VALUES (3, 5, 'd0370c7c-cd63-45d4-b97f-35243a5f22b6', '2023-03-01 23:52:29.567306');
+
+
+--
+-- Data for Name: urls; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO public.urls VALUES (1, 5, 'https://www.youtube.com/watch?v=aqIz4wtoWAU', 'o828DUW-', 0, '2023-03-02 14:56:28.154295');
+INSERT INTO public.urls VALUES (2, 5, 'https://www.youtube.com/watch?v=aqIz4wtoWAU', 'HA9sATXD', 0, '2023-03-02 14:56:30.691087');
+INSERT INTO public.urls VALUES (3, 5, 'https://www.youtube.com/watch?v=aqIz4wtoWAU', '-gGuInLn', 0, '2023-03-02 14:56:31.945958');
+INSERT INTO public.urls VALUES (4, 5, 'https://www.youtube.com/watch?v=aqIz4wtoWAU', 'POp6hU-T', 0, '2023-03-02 14:56:33.472633');
+INSERT INTO public.urls VALUES (5, 5, 'https://www.youtube.com/watch?v=aqIz4wtoWAU', 'wJd-6tZf', 0, '2023-03-02 14:56:34.988946');
 
 
 --
@@ -120,7 +174,14 @@ INSERT INTO public.users VALUES (5, 'ALANTIMBO', 'TESTEALAN@gmail.com', '$2b$10$
 -- Name: sessions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.sessions_id_seq', 1, true);
+SELECT pg_catalog.setval('public.sessions_id_seq', 3, true);
+
+
+--
+-- Name: urls_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.urls_id_seq', 5, true);
 
 
 --
@@ -147,6 +208,22 @@ ALTER TABLE ONLY public.sessions
 
 
 --
+-- Name: urls urls_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.urls
+    ADD CONSTRAINT urls_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: urls urls_shortUrl_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.urls
+    ADD CONSTRAINT "urls_shortUrl_key" UNIQUE ("shortUrl");
+
+
+--
 -- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -168,6 +245,14 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.sessions
     ADD CONSTRAINT "sessions_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users(id);
+
+
+--
+-- Name: urls urls_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.urls
+    ADD CONSTRAINT "urls_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users(id);
 
 
 --
