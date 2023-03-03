@@ -40,3 +40,39 @@ export async function signIn(req, res) {
     return res.status(500).send(err.message);
   }
 }
+
+export async function userData(req, res) {
+  const user = res.locals.user;
+
+  try {
+    const userUrls = await connection.query(
+      'SELECT * FROM urls WHERE "userId"=$1',
+      [user.rows[0].id]
+    );
+
+    let totalVisitCount = 0;
+    let shortenedUrlsArray = [];
+    
+    for (let i = 0; i < userUrls.rows.length; i++) {
+      totalVisitCount += parseInt(userUrls.rows[i].visitCount);
+
+      shortenedUrlsArray.push({
+        id: userUrls.rows[i].id,
+        shortUrl: userUrls.rows[i].shortUrl,
+        url: userUrls.rows[i].url,
+        visitCount: userUrls.rows[i].visitCount,
+      });
+    }
+
+    const userLinksData = {
+      id: user.rows[0].id,
+      name: user.rows[0].name,
+      visitCount: totalVisitCount,
+      shortenedUrls: shortenedUrlsArray,
+    };
+
+    return res.status(200).send(userLinksData);
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
+}
