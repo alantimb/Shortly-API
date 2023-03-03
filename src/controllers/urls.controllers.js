@@ -84,13 +84,47 @@ export async function deleteShortUrl(req, res) {
     const urlExists = await connection.query("SELECT * FROM urls WHERE id=$1", [
       id,
     ]);
-    
+
     if (urlExists.rows.length === 0) return res.sendStatus(404);
-    if (urlExists.rows[0].userId !== user.rows[0].id) return res.sendStatus(401);
-    
-    const deleteShort = await connection.query("DELETE FROM urls WHERE id=$1", [id]);
-    
+    if (urlExists.rows[0].userId !== user.rows[0].id)
+      return res.sendStatus(401);
+
+    const deleteShort = await connection.query("DELETE FROM urls WHERE id=$1", [
+      id,
+    ]);
+
     return res.status(204).send(deleteShort);
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
+}
+
+export async function visitRank(req, res) {
+  try {
+    const users = await connection.query("SELECT * FROM users");
+    const usersRanking = [];
+
+    for (let i = 0; i < users.rows.length; i++) {
+      const urlsLinksCount = await connection.query(
+        'SELECT COUNT(*) FROM urls WHERE "userId"=$1',
+        [users.rows[i].id]
+      );
+      const urlsVisitCount = await connection.query(
+        'SELECT SUM("visitCount") FROM urls WHERE "userId"=$1',
+        [users.rows[i].id]
+      );
+      const userObject = {
+        id: users.rows[i].id,
+        name: users.rows[i].name,
+        linksCount: urlsLinksCount.rows[0].count,
+        visitCount:
+          urlsVisitCount.rows[0].sum === null ? 0 : urlsVisitCount.rows[0].sum,
+      };
+      usersRanking.push(userObject);
+    }
+    console.log(usersRanking);
+
+    return res.status(200).send(usersRanking);
   } catch (err) {
     return res.status(500).send(err.message);
   }

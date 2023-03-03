@@ -4,6 +4,7 @@ import {
   createShortUrl,
   goToShortUrl,
   deleteShortUrl,
+  visitRank,
 } from "../controllers/urls.controllers.js";
 import { authRoutesValidation } from "../middlewares/auth.middlewares.js";
 import { urlSchemaValidation } from "../middlewares/urls.middlewares.js";
@@ -19,5 +20,6 @@ router.post(
 router.get("/urls/:id", findShortenUrl);
 router.get("/urls/open/:shortUrl", goToShortUrl);
 router.delete("/urls/:id", authRoutesValidation, deleteShortUrl);
+router.get("/ranking", visitRank);
 
 export default router;
