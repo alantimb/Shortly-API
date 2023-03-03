@@ -127,10 +127,13 @@ export async function visitRank(req, res) {
         usersRanking.push(userObject);
       }
     }
-    usersRanking.sort(function(a,b) {
-      return parseInt(a.visitCount) < parseInt(b.visitCount) ? 1 : parseInt(a.visitCount) > parseInt(b.visitCount) ? -1 : 0;
-  });
-    console.log(usersRanking);
+    usersRanking.sort(function (a, b) {
+      return parseInt(a.visitCount) < parseInt(b.visitCount)
+        ? 1
+        : parseInt(a.visitCount) > parseInt(b.visitCount)
+        ? -1
+        : 0;
+    });
 
     return res.status(200).send(usersRanking);
   } catch (err) {
