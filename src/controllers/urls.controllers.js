@@ -77,7 +77,7 @@ export async function goToShortUrl(req, res) {
 }
 
 export async function deleteShortUrl(req, res) {
-  const { id } = req.params;
+  const { id } = req.params; // id do shortUrl
   const user = res.locals.user;
 
   try {
@@ -89,9 +89,9 @@ export async function deleteShortUrl(req, res) {
 
     if (urlExists.rows[0].userId !== user.rows[0].id) return res.status(401);
     
-    await connection.query("DELETE FROM urls WHERE id=$1", [id]);
+    const deleteShort = await connection.query("DELETE FROM urls WHERE id=$1", [id]);
     
-    return res.status(204);
+    return res.status(204).send(deleteShort);
   } catch (err) {
     return res.status(500).send(err.message);
   }
