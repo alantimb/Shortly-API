@@ -120,7 +120,12 @@ export async function visitRank(req, res) {
         visitCount:
           urlsVisitCount.rows[0].sum === null ? 0 : urlsVisitCount.rows[0].sum,
       };
-      usersRanking.push(userObject);
+
+      if (usersRanking.length > 10) {
+        break;
+      } else {
+        usersRanking.push(userObject);
+      }
     }
     console.log(usersRanking);
 
