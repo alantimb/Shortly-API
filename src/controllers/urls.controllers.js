@@ -128,7 +128,7 @@ export async function visitRank(req, res) {
       }
     }
     usersRanking.sort(function(a,b) {
-      return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+      return parseInt(a.visitCount) < parseInt(b.visitCount) ? 1 : parseInt(a.visitCount) > parseInt(b.visitCount) ? -1 : 0;
   });
     console.log(usersRanking);
 
