@@ -77,5 +77,22 @@ export async function goToShortUrl(req, res) {
 }
 
 export async function deleteShortUrl(req, res) {
+  const { id } = req.params;
+  const user = res.locals.user;
+
+  try {
+    const urlExists = await connection.query("SELECT * FROM urls WHERE id=$1", [
+      id,
+    ]);
     
+    if (urlExists.rows.length === 0) return res.status(404);
+
+    if (urlExists.rows[0].userId !== user.rows[0].id) return res.status(401);
+    
+    await connection.query("DELETE FROM urls WHERE id=$1", [id]);
+    
+    return res.status(204);
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
 }

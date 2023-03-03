@@ -76,7 +76,7 @@ export async function authRoutesValidation(req, res, next) {
     const user = await connection.query("SELECT * FROM users WHERE id=$1", [
       session.rows[0].userId,
     ]);
-
+    
     res.locals.user = user;
     next();
   } catch (err) {
