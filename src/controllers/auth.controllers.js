@@ -28,7 +28,6 @@ export async function signIn(req, res) {
       "SELECT id FROM users WHERE email=$1",
       [user.email]
     );
-    console.log(userId.rows[0].id);
 
     await connection.query(
       'INSERT INTO sessions ("userId", token) VALUES ($1, $2)',

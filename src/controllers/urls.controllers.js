@@ -85,9 +85,8 @@ export async function deleteShortUrl(req, res) {
       id,
     ]);
     
-    if (urlExists.rows.length === 0) return res.status(404);
-
-    if (urlExists.rows[0].userId !== user.rows[0].id) return res.status(401);
+    if (urlExists.rows.length === 0) return res.sendStatus(404);
+    if (urlExists.rows[0].userId !== user.rows[0].id) return res.sendStatus(401);
     
     const deleteShort = await connection.query("DELETE FROM urls WHERE id=$1", [id]);
     
