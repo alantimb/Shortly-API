@@ -121,12 +121,15 @@ export async function visitRank(req, res) {
           urlsVisitCount.rows[0].sum === null ? 0 : urlsVisitCount.rows[0].sum,
       };
 
-      if (usersRanking.length > 10) {
+      if (usersRanking.length >= 10) {
         break;
       } else {
         usersRanking.push(userObject);
       }
     }
+    usersRanking.sort(function(a,b) {
+      return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+  });
     console.log(usersRanking);
 
     return res.status(200).send(usersRanking);
